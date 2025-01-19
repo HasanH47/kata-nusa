@@ -1,0 +1,80 @@
+name: Lint and Prettier
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        required: true
+        type: string
+  workflow_dispatch:
+
+jobs:
+  lint-and-prettier:
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: lint-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Dependencies
+        run: |
+          composer install --prefer-dist --no-interaction --no-progress
+          npm ci
+
+      - name: Run PHPStan
+        run: ./vendor/bin/phpstan analyse
+
+      - name: Run Laravel Pint
+        run: ./vendor/bin/pint
+
+      - name: Run ESLint and Prettier
+        run: |
+          npm run format
+
+      - name: Configure Git
+        env:
+          GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
+          GIT_USER_NAME: ${{ secrets.GIT_USER_NAME }}
+        run: |
+          git config --global user.email "$GIT_USER_EMAIL"
+          git config --global user.name "$GIT_USER_NAME"
+
+      - name: Commit and Push changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git add .
+            COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+            git commit -m "linting: $COMMIT_MESSAGE"
+            git push https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git "HEAD:${{ inputs.branch }}"
+          else
+            echo "No changes to commit"
+          fi
