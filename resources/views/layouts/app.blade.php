@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    {!! seo() !!}
+    {!! seo($page ?? $SEOData) !!}
     @vite('resources/css/app.css')
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -18,10 +18,10 @@
 
                     <!-- Desktop Navigation -->
                     <div class="hidden md:flex items-center space-x-6">
-                        <a href="/" class="text-gray-700 hover:text-gray-900">Beranda</a>
-                        <a href="/categories" class="text-gray-700 hover:text-gray-900">Kategori</a>
-                        <a href="/trending" class="text-gray-700 hover:text-gray-900">Trending</a>
-                        <a href="/about" class="text-gray-700 hover:text-gray-900">Tentang</a>
+                        <a href="{{ route('home')}}" class="text-gray-700 hover:text-gray-900">Beranda</a>
+                        <a href="{{route('categories.index')}}" class="text-gray-700 hover:text-gray-900">Kategori</a>
+                        <a href="{{route('trending')}}" class="text-gray-700 hover:text-gray-900">Trending</a>
+                        <a href="{{route('about')}}" class="text-gray-700 hover:text-gray-900">Tentang</a>
                     </div>
                 </div>
 
@@ -40,8 +40,8 @@
 
                     <!-- Auth Buttons -->
                     <div class="flex items-center space-x-2">
-                        <a href="/login" class="px-4 py-2 text-gray-700 hover:text-gray-900">Masuk</a>
-                        <a href="/register" class="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800">Daftar</a>
+                        <a href="{{route('login')}}" class="px-4 py-2 text-gray-700 hover:text-gray-900">Masuk</a>
+                        <a href="{{route('register')}}" class="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800">Daftar</a>
                     </div>
 
                     <!-- Mobile Menu Button -->

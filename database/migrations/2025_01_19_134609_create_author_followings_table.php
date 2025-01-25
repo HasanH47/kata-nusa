@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,7 +13,7 @@ return new class extends Migration
         Schema::create('author_followers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('author_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('follower_id')->constrained('authors')->cascadeOnDelete();
+            $table->foreignId('followed_author_id')->constrained('authors')->cascadeOnDelete();
             $table->timestamps();
         });
     }

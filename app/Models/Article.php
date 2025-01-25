@@ -3,17 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+use RalphJSmit\Laravel\SEO\Support\HasSEO;
 use Symfony\Component\Uid\Ulid;
 use WendellAdriel\Lift\Attributes\Cast;
 use WendellAdriel\Lift\Attributes\Column;
 use WendellAdriel\Lift\Attributes\Fillable;
 use WendellAdriel\Lift\Lift;
-use Illuminate\Support\Str;
-use RalphJSmit\Laravel\SEO\Support\HasSEO;
 
 class Article extends Model
 {
-    use Lift, HasSEO;
+    use HasSEO, Lift;
 
     #[Cast('int')]
     #[Column(name: 'author_id')]
@@ -44,6 +44,16 @@ class Article extends Model
     #[Fillable]
     public ?string $body;
 
+    #[Cast('int')]
+    #[Column(name: 'views')]
+    #[Fillable]
+    public ?int $views;
+
+    #[Cast('int')]
+    #[Column(name: 'likes')]
+    #[Fillable]
+    public ?int $likes;
+
     #[Cast('boolean')]
     #[Column(name: 'is_published')]
     #[Fillable]
@@ -56,5 +66,25 @@ class Article extends Model
         $title = Str::replace(' ', '-', $title);
 
         return $title . '-' . $ulid;
+    }
+
+    /**
+     * The author of the article.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function author()
+    {
+        return $this->belongsTo(Author::class);
+    }
+
+    /**
+     * Get the article comments associated with the article.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function articleComments()
+    {
+        return $this->hasMany(ArticleComment::class);
     }
 }

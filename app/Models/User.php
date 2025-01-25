@@ -12,15 +12,11 @@ use WendellAdriel\Lift\Attributes\Fillable;
 use WendellAdriel\Lift\Attributes\Hidden;
 use WendellAdriel\Lift\Lift;
 
-class User extends Authenticatable {
+class User extends Authenticatable
+{
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use Lift, HasFactory, Notifiable;
+    use HasFactory, Lift, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     #[Cast('string')]
     #[Column(name: 'name')]
     #[Fillable]
@@ -54,7 +50,8 @@ class User extends Authenticatable {
      *
      * @return array<string, string>
      */
-    protected function casts(): array {
+    protected function casts(): array
+    {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',

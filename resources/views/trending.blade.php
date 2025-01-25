@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', 'Trending - KataNusa')
-
 @section('content')
 <div class="max-w-7xl mx-auto">
     <h1 class="text-3xl font-bold text-gray-900 mb-8">Trending di KataNusa</h1>

@@ -16,4 +16,14 @@ class Category extends Model
     #[Column(name: 'name')]
     #[Fillable]
     public ?string $name;
+
+    /**
+     * Get the article categories that belong to the Category
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function articleCategories()
+    {
+        return $this->hasMany(ArticleCategory::class);
+    }
 }
