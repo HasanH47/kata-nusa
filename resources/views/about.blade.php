@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', 'Tentang KataNusa')
-
 @section('content')
 <div class="max-w-4xl mx-auto">
     <!-- Hero Section -->
@@ -14,17 +12,17 @@
     <div class="bg-white border border-gray-200 rounded-lg p-8 mb-8">
         <h2 class="text-2xl font-bold text-gray-900 mb-4">Misi Kami</h2>
         <p class="text-gray-600 mb-6">
-            KataNusa hadir sebagai platform yang menghubungkan para penulis dan pembaca yang tertarik dengan keberagaman budaya, sejarah, dan kehidupan di Nusantara. Kami percaya bahwa setiap cerita memiliki nilai dan dapat memberikan perspektif baru dalam memahami kekayaan budaya Indonesia.
+            KataNusa hadir sebagai platform yang menghubungkan para penulis dan pembaca dari berbagai latar belakang untuk berbagi cerita, pengetahuan, dan inspirasi. Kami percaya bahwa setiap tulisan, baik tentang teknologi, kehidupan, budaya, maupun ide-ide baru, memiliki nilai yang dapat memberikan perspektif segar dalam memahami dunia di sekitar kita. KataNusa adalah tempat bagi semua orang untuk menyuarakan pikiran dan menemukan wawasan baru.
         </p>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="text-center">
                 <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="h-8 w-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                    </svg>
+                     <svg class="h-8 w-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
                 </div>
-                <h3 class="font-bold text-gray-900 mb-2">Berbagi Cerita</h3>
-                <p class="text-gray-600">Mendorong setiap orang untuk berbagi cerita dan pengalaman mereka tentang Nusantara.</p>
+                <h3 class="font-bold text-gray-900 mb-2">Berbagi Pengetahuan</h3>
+Mendorong setiap orang untuk berbagi cerita, pengalaman, dan wawasan mereka, baik tentang teknologi, budaya, maupun kehidupan.</p>
             </div>
             <div class="text-center">
                 <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -33,16 +31,16 @@
                     </svg>
                 </div>
                 <h3 class="font-bold text-gray-900 mb-2">Menghubungkan</h3>
-                <p class="text-gray-600">Membangun jembatan antara penulis dan pembaca yang memiliki minat sama.</p>
+                <p class="text-gray-600">Membangun jembatan antara penulis dan pembaca dengan minat di berbagai topik, dari teknologi hingga seni.</p>
             </div>
             <div class="text-center">
                 <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg class="h-8 w-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                    </svg>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
                 </div>
-                <h3 class="font-bold text-gray-900 mb-2">Melestarikan</h3>
-                <p class="text-gray-600">Mendokumentasikan dan melestarikan kekayaan budaya Nusantara dalam bentuk digital.</p>
+                <h3 class="font-bold text-gray-900 mb-2">Menyatukan Ide</h3>
+                <p class="text-gray-600">Mengumpulkan dan mendokumentasikan berbagai ide, cerita, dan wawasan untuk memperkaya literasi digital.</p>
             </div>
         </div>
     </div>
@@ -50,25 +48,25 @@
     <!-- Community Stats -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div class="bg-white border border-gray-200 rounded-lg p-6 text-center">
-            <div class="text-3xl font-bold text-gray-900 mb-2">10K+</div>
-            <div class="text-gray-600">Penulis Aktif</div>
+          <div class="text-3xl font-bold text-gray-900 mb-2">{{ $countAuthors }}</div>
+          <div class="text-gray-600">Penulis Aktif</div>
         </div>
         <div class="bg-white border border-gray-200 rounded-lg p-6 text-center">
-            <div class="text-3xl font-bold text-gray-900 mb-2">50K+</div>
-            <div class="text-gray-600">Artikel</div>
+          <div class="text-3xl font-bold text-gray-900 mb-2">{{ $countArticlePublished }}</div>
+          <div class="text-gray-600">Artikel</div>
         </div>
         <div class="bg-white border border-gray-200 rounded-lg p-6 text-center">
-            <div class="text-3xl font-bold text-gray-900 mb-2">100K+</div>
-            <div class="text-gray-600">Pembaca</div>
+          <div class="text-3xl font-bold text-gray-900 mb-2">{{ $countArticleRead }}</div>
+          <div class="text-gray-600">Pembaca</div>
         </div>
         <div class="bg-white border border-gray-200 rounded-lg p-6 text-center">
-            <div class="text-3xl font-bold text-gray-900 mb-2">34</div>
+            <div class="text-3xl font-bold text-gray-900 mb-2">38</div>
             <div class="text-gray-600">Provinsi</div>
         </div>
     </div>
 
     <!-- Team Section -->
-    <div class="bg-white border border-gray-200 rounded-lg p-8 mb-8">
+    {{-- <div class="bg-white border border-gray-200 rounded-lg p-8 mb-8">
         <h2 class="text-2xl font-bold text-gray-900 mb-8">Tim Kami</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             @foreach(range(1, 3) as $index)
@@ -96,10 +94,10 @@
             </div>
             @endforeach
         </div>
-    </div>
+    </div> --}}
 
     <!-- Contact Section -->
-    <div class="bg-white border border-gray-200 rounded-lg p-8">
+    {{-- <div class="bg-white border border-gray-200 rounded-lg p-8">
         <h2 class="text-2xl font-bold text-gray-900 mb-8">Hubungi Kami</h2>
         <form class="space-y-6">
             <div>
@@ -136,6 +134,6 @@
                 </button>
             </div>
         </form>
-    </div>
+    </div> --}}
 </div>
 @endsection

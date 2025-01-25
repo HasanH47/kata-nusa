@@ -10,7 +10,11 @@ use WendellAdriel\Lift\Attributes\Fillable;
 use WendellAdriel\Lift\Lift;
 use Illuminate\Support\Str;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
+use WendellAdriel\Lift\Attributes\Relations\BelongsTo;
+use WendellAdriel\Lift\Attributes\Relations\HasMany;
 
+#[BelongsTo(Author::class)]
+#[HasMany(ArticleComment::class)]
 class Article extends Model
 {
     use Lift, HasSEO;
@@ -43,6 +47,16 @@ class Article extends Model
     #[Column(name: 'body')]
     #[Fillable]
     public ?string $body;
+
+    #[Cast('int')]
+    #[Column(name: 'views')]
+    #[Fillable]
+    public ?int $views;
+
+    #[Cast('int')]
+    #[Column(name: 'likes')]
+    #[Fillable]
+    public ?int $likes;
 
     #[Cast('boolean')]
     #[Column(name: 'is_published')]

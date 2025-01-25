@@ -6,8 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 use WendellAdriel\Lift\Attributes\Cast;
 use WendellAdriel\Lift\Attributes\Column;
 use WendellAdriel\Lift\Attributes\Fillable;
+use WendellAdriel\Lift\Attributes\Relations\BelongsTo;
+use WendellAdriel\Lift\Attributes\Relations\HasMany;
 use WendellAdriel\Lift\Lift;
 
+#[BelongsTo(User::class)]
+#[HasMany(Article::class)]
+#[HasMany(AuthorFollower::class, 'followers', 'followed_author_id', 'id')]
 class Author extends Model
 {
     use Lift;

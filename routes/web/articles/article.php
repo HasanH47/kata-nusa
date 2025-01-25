@@ -8,4 +8,6 @@ Route::group([
   'prefix' => 'articles',
 ], function () {
   Route::get('/', [ArticleController::class, 'index'])->name('articles.index');
+
+  Route::get('/{article}', [ArticleController::class, 'show'])->name('articles.show');
 });

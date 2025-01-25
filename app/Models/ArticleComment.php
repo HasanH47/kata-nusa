@@ -8,9 +8,14 @@ use WendellAdriel\Lift\Attributes\Column;
 use WendellAdriel\Lift\Attributes\Fillable;
 use WendellAdriel\Lift\Lift;
 
-class AuthorFollower extends Model
+class ArticleComment extends Model
 {
     use Lift;
+
+    #[Cast('int')]
+    #[Column(name: 'article_id')]
+    #[Fillable]
+    public ?int $articleId;
 
     #[Cast('int')]
     #[Column(name: 'author_id')]
@@ -18,7 +23,12 @@ class AuthorFollower extends Model
     public ?int $authorId;
 
     #[Cast('int')]
-    #[Column(name: 'followed_author_id')]
+    #[Column(name: 'comment_id')]
     #[Fillable]
-    public ?int $followedAuthorId;
+    public ?int $commentId;
+
+    #[Cast('string')]
+    #[Column(name: 'body')]
+    #[Fillable]
+    public ?string $body;
 }
