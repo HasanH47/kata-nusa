@@ -37,7 +37,6 @@ require base_path($path . '/authors/author.php');
 
 // Protected Routes
 Route::middleware('auth')->group(function () use ($path) {
-
     // Dashboard Routes
     require base_path($path . '/dashboard/dashboard.php');
 });

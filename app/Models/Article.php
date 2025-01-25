@@ -3,17 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+use RalphJSmit\Laravel\SEO\Support\HasSEO;
 use Symfony\Component\Uid\Ulid;
 use WendellAdriel\Lift\Attributes\Cast;
 use WendellAdriel\Lift\Attributes\Column;
 use WendellAdriel\Lift\Attributes\Fillable;
 use WendellAdriel\Lift\Lift;
-use Illuminate\Support\Str;
-use RalphJSmit\Laravel\SEO\Support\HasSEO;
 
-class Article extends Model
-{
-    use Lift, HasSEO;
+class Article extends Model {
+    use HasSEO, Lift;
 
     #[Cast('int')]
     #[Column(name: 'author_id')]
@@ -59,8 +58,7 @@ class Article extends Model
     #[Fillable]
     public ?bool $isPublished;
 
-    public function generateSlug(): string
-    {
+    public function generateSlug(): string {
         $ulid = Ulid::generate();
         $title = Str::lower($this->title);
         $title = Str::replace(' ', '-', $title);
@@ -73,8 +71,7 @@ class Article extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function author()
-    {
+    public function author() {
         return $this->belongsTo(Author::class);
     }
 
@@ -83,8 +80,7 @@ class Article extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function articleComments()
-    {
+    public function articleComments() {
         return $this->hasMany(ArticleComment::class);
     }
 }

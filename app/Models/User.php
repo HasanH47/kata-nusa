@@ -14,7 +14,7 @@ use WendellAdriel\Lift\Lift;
 
 class User extends Authenticatable {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use Lift, HasFactory, Notifiable;
+    use HasFactory, Lift, Notifiable;
 
     #[Cast('string')]
     #[Column(name: 'name')]
