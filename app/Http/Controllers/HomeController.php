@@ -7,8 +7,10 @@ use App\Models\Author;
 use App\Models\Category;
 use RalphJSmit\Laravel\SEO\Support\SEOData;
 
-class HomeController extends Controller {
-    public function index($page = 5, $is_following = false) {
+class HomeController extends Controller
+{
+    public function index($page = 5, $is_following = false)
+    {
         $articles = Article::with(['author', 'articleComments'])
             ->where('is_published', true)
             ->orderBy('created_at', 'desc')
@@ -36,7 +38,8 @@ class HomeController extends Controller {
         ]);
     }
 
-    public function about() {
+    public function about()
+    {
         $countAuthors = Author::count();
         $countArticlePublished = Article::where('is_published', true)->count();
         $countArticleRead = Article::where('is_published', true)->sum('views');
@@ -52,7 +55,8 @@ class HomeController extends Controller {
         ]);
     }
 
-    private function formatNumber($number) {
+    private function formatNumber($number)
+    {
         if ($number >= 1000) {
             return number_format($number / 1000, 1) . 'K+';
         }
@@ -60,7 +64,8 @@ class HomeController extends Controller {
         return $number;
     }
 
-    public function trending() {
+    public function trending()
+    {
         return view('trending', [
             'SEOData' => new SEOData(
                 title: 'Trending - KataNusa',

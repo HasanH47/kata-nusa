@@ -8,7 +8,8 @@ use WendellAdriel\Lift\Attributes\Column;
 use WendellAdriel\Lift\Attributes\Fillable;
 use WendellAdriel\Lift\Lift;
 
-class Category extends Model {
+class Category extends Model
+{
     use Lift;
 
     #[Cast('string')]
@@ -21,7 +22,8 @@ class Category extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function articleCategories() {
+    public function articleCategories()
+    {
         return $this->hasMany(ArticleCategory::class);
     }
 }

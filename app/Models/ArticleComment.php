@@ -8,7 +8,8 @@ use WendellAdriel\Lift\Attributes\Column;
 use WendellAdriel\Lift\Attributes\Fillable;
 use WendellAdriel\Lift\Lift;
 
-class ArticleComment extends Model {
+class ArticleComment extends Model
+{
     use Lift;
 
     #[Cast('int')]

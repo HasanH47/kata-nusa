@@ -8,7 +8,8 @@ use WendellAdriel\Lift\Attributes\Column;
 use WendellAdriel\Lift\Attributes\Fillable;
 use WendellAdriel\Lift\Lift;
 
-class Author extends Model {
+class Author extends Model
+{
     use Lift;
 
     #[Cast('int')]
@@ -46,7 +47,8 @@ class Author extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
@@ -55,7 +57,8 @@ class Author extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function articles() {
+    public function articles()
+    {
         return $this->hasMany(Article::class);
     }
 
@@ -64,7 +67,8 @@ class Author extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function followers() {
+    public function followers()
+    {
         return $this->hasMany(AuthorFollower::class, 'followed_author_id', 'id');
     }
 }

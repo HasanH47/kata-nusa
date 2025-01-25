@@ -10,7 +10,8 @@ use WendellAdriel\Lift\Attributes\Relations\BelongsTo;
 use WendellAdriel\Lift\Lift;
 
 #[BelongsTo(Article::class)]
-class ArticleCategory extends Model {
+class ArticleCategory extends Model
+{
     use Lift;
 
     #[Cast('int')]
