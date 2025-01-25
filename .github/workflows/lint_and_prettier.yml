@@ -69,12 +69,14 @@ jobs:
           git config --global user.name "$GIT_USER_NAME"
 
       - name: Commit and Push changes
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git add .
             COMMIT_MESSAGE=$(git log -1 --pretty=%B)
             git commit -m "linting: $COMMIT_MESSAGE"
-            git push https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git "HEAD:${{ inputs.branch }}"
+            git push https://$GH_TOKEN@github.com/${{ github.repository }}.git "HEAD:${{ inputs.branch }}"
           else
             echo "No changes to commit"
           fi

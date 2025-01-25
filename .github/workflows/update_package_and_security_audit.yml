@@ -78,12 +78,14 @@ jobs:
           git config --global user.email "$GIT_USER_EMAIL"
 
       - name: Commit and Push changes
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           if [ -n "$(git status --porcelain package.json)" ]; then
             git add package.json
             COMMIT_MESSAGE=$(git log -1 --pretty=%B)
             git commit -m "Update packages and run security audit: $COMMIT_MESSAGE"
-            git push https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git "HEAD:${{ inputs.branch }}"
+            git push https://$GH_TOKEN@github.com/${{ github.repository }}.git "HEAD:${{ inputs.branch }}"
           else
             echo "No changes to commit"
           fi
