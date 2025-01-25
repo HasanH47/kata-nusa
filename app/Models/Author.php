@@ -6,13 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use WendellAdriel\Lift\Attributes\Cast;
 use WendellAdriel\Lift\Attributes\Column;
 use WendellAdriel\Lift\Attributes\Fillable;
-use WendellAdriel\Lift\Attributes\Relations\BelongsTo;
-use WendellAdriel\Lift\Attributes\Relations\HasMany;
 use WendellAdriel\Lift\Lift;
 
-#[BelongsTo(User::class)]
-#[HasMany(Article::class)]
-#[HasMany(AuthorFollower::class, 'followers', 'followed_author_id', 'id')]
 class Author extends Model
 {
     use Lift;
@@ -46,4 +41,34 @@ class Author extends Model
     #[Column(name: 'website')]
     #[Fillable]
     public string $website;
+
+    /**
+     * The user that owns the author.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * The articles that belong to the author.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+    }
+
+    /**
+     * Get the followers of the author.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function followers()
+    {
+        return $this->hasMany(AuthorFollower::class, 'followed_author_id', 'id');
+    }
 }

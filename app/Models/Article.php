@@ -10,11 +10,7 @@ use WendellAdriel\Lift\Attributes\Fillable;
 use WendellAdriel\Lift\Lift;
 use Illuminate\Support\Str;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
-use WendellAdriel\Lift\Attributes\Relations\BelongsTo;
-use WendellAdriel\Lift\Attributes\Relations\HasMany;
 
-#[BelongsTo(Author::class)]
-#[HasMany(ArticleComment::class)]
 class Article extends Model
 {
     use Lift, HasSEO;
@@ -70,5 +66,25 @@ class Article extends Model
         $title = Str::replace(' ', '-', $title);
 
         return $title . '-' . $ulid;
+    }
+
+    /**
+     * The author of the article.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function author()
+    {
+        return $this->belongsTo(Author::class);
+    }
+
+    /**
+     * Get the article comments associated with the article.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function articleComments()
+    {
+        return $this->hasMany(ArticleComment::class);
     }
 }
