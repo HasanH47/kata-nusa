@@ -1,79 +1,211 @@
-FROM ubuntu:24.04
+ARG PHP_VERSION=8.4
+ARG FRANKENPHP_VERSION=1.4
+ARG COMPOSER_VERSION=2.8
+ARG BUN_VERSION="latest"
+ARG APP_ENV
 
-LABEL maintainer="Taylor Otwell"
+FROM composer:${COMPOSER_VERSION} AS vendor
 
+FROM dunglas/frankenphp:${FRANKENPHP_VERSION}-builder-php${PHP_VERSION} AS upstream
+
+COPY --from=caddy:builder /usr/bin/xcaddy /usr/bin/xcaddy
+
+RUN CGO_ENABLED=1 \
+    XCADDY_SETCAP=1 \
+    XCADDY_GO_BUILD_FLAGS="-ldflags='-w -s' -tags=nobadger,nomysql,nopgx" \
+    CGO_CFLAGS=$(php-config --includes) \
+    CGO_LDFLAGS="$(php-config --ldflags) $(php-config --libs)" \
+    xcaddy build \
+    --output /usr/local/bin/frankenphp \
+    --with github.com/dunglas/frankenphp=./ \
+    --with github.com/dunglas/frankenphp/caddy=./caddy/ \
+    --with github.com/dunglas/caddy-cbrotli
+
+FROM dunglas/frankenphp:${FRANKENPHP_VERSION}-php${PHP_VERSION} AS base
+
+COPY --from=upstream /usr/local/bin/frankenphp /usr/local/bin/frankenphp
+
+LABEL maintainer="SMortexa <seyed.me720@gmail.com>"
+LABEL org.opencontainers.image.title="Laravel Octane Dockerfile"
+LABEL org.opencontainers.image.description="Production-ready Dockerfile for Laravel Octane"
+LABEL org.opencontainers.image.source=https://github.com/exaco/laravel-octane-dockerfile
+LABEL org.opencontainers.image.licenses=MIT
+
+ARG WWWUSER=1000
 ARG WWWGROUP=1000
-ARG NODE_VERSION=22
-ARG MYSQL_CLIENT="mysql-client"
-ARG POSTGRES_VERSION=17
+ARG TZ=UTC
+ARG APP_DIR=/var/www/html
+ARG APP_ENV
+ARG APP_HOST
 
-WORKDIR /var/www/html
+ENV DEBIAN_FRONTEND=noninteractive \
+    TERM=xterm-color \
+    OCTANE_SERVER=frankenphp \
+    TZ=${TZ} \
+    USER=octane \
+    ROOT=${APP_DIR} \
+    APP_ENV=${APP_ENV} \
+    COMPOSER_FUND=0 \
+    COMPOSER_MAX_PARALLEL_HTTP=24 \
+    XDG_CONFIG_HOME=${APP_DIR}/.config \
+    XDG_DATA_HOME=${APP_DIR}/.data \
+    SERVER_NAME=${APP_HOST}
 
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=Asia/Jakarta
-ENV APP_PORT=80
-ENV SUPERVISOR_PHP_COMMAND="/usr/bin/php -d variables_order=EGPCS /var/www/html/artisan octane:start --server=frankenphp --host=0.0.0.0 --admin-port=2019 --port='${APP_PORT}'"
-ENV SUPERVISOR_PHP_USER="sail"
+WORKDIR ${ROOT}
 
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+SHELL ["/bin/bash", "-eou", "pipefail", "-c"]
 
-RUN echo "Acquire::http::Pipeline-Depth 0;" > /etc/apt/apt.conf.d/99custom && \
-    echo "Acquire::http::No-Cache true;" >> /etc/apt/apt.conf.d/99custom && \
-    echo "Acquire::BrokenProxy    true;" >> /etc/apt/apt.conf.d/99custom
+RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime \
+    && echo ${TZ} > /etc/timezone
 
-RUN apt-get update && apt-get upgrade -y \
-    && mkdir -p /etc/apt/keyrings \
-    && apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor sqlite3 libcap2-bin libpng-dev python3 dnsutils librsvg2-bin fswatch ffmpeg nano  \
-    && curl -sS 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xb8dc7e53946656efbce4c1dd71daeaab4ad4cab6' | gpg --dearmor | tee /etc/apt/keyrings/ppa_ondrej_php.gpg > /dev/null \
-    && echo "deb [signed-by=/etc/apt/keyrings/ppa_ondrej_php.gpg] https://ppa.launchpadcontent.net/ondrej/php/ubuntu noble main" > /etc/apt/sources.list.d/ppa_ondrej_php.list \
-    && apt-get update \
-    && apt-get install -y php8.4-cli php8.4-dev \
-    php8.4-pgsql php8.4-sqlite3 php8.4-gd \
-    php8.4-curl php8.4-mongodb \
-    php8.4-imap php8.4-mysql php8.4-mbstring \
-    php8.4-xml php8.4-zip php8.4-bcmath php8.4-soap \
-    php8.4-intl php8.4-readline \
-    php8.4-ldap \
-    php8.4-msgpack php8.4-igbinary php8.4-redis php8.4-swoole \
-    php8.4-memcached php8.4-pcov php8.4-imagick php8.4-xdebug \
-    && curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer \
-    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
-    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_VERSION.x nodistro main" > /etc/apt/sources.list.d/nodesource.list \
-    && apt-get update \
-    && apt-get install -y nodejs \
-    && npm install -g npm \
-    && npm install -g pnpm \
-    && npm install -g bun \
-    && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /etc/apt/keyrings/yarn.gpg >/dev/null \
-    && echo "deb [signed-by=/etc/apt/keyrings/yarn.gpg] https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
-    && curl -sS https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | tee /etc/apt/keyrings/pgdg.gpg >/dev/null \
-    && echo "deb [signed-by=/etc/apt/keyrings/pgdg.gpg] http://apt.postgresql.org/pub/repos/apt noble-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
-    && apt-get update \
-    && apt-get install -y yarn \
-    && apt-get install -y $MYSQL_CLIENT \
-    && apt-get install -y postgresql-client-$POSTGRES_VERSION \
+RUN apt-get update; \
+    apt-get upgrade -yqq; \
+    apt-get install -yqq --no-install-recommends --show-progress \
+    apt-utils \
+    curl \
+    wget \
+    vim \
+    git \
+    ncdu \
+    procps \
+    ca-certificates \
+    supervisor \
+    libsodium-dev \
+    libbrotli-dev \
+    # Install PHP extensions (included with dunglas/frankenphp)
+    && install-php-extensions \
+    bz2 \
+    pcntl \
+    mbstring \
+    bcmath \
+    sockets \
+    pgsql \
+    pdo_pgsql \
+    opcache \
+    exif \
+    pdo_mysql \
+    zip \
+    uv \
+    intl \
+    gd \
+    redis \
+    rdkafka \
+    memcached \
+    igbinary \
+    ldap \
     && apt-get -y autoremove \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    && docker-php-source delete \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    && rm /var/log/lastlog /var/log/faillog
 
-RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.4
+RUN arch="$(uname -m)" \
+    && case "$arch" in \
+    armhf) _cronic_fname='supercronic-linux-arm' ;; \
+    aarch64) _cronic_fname='supercronic-linux-arm64' ;; \
+    x86_64) _cronic_fname='supercronic-linux-amd64' ;; \
+    x86) _cronic_fname='supercronic-linux-386' ;; \
+    *) echo >&2 "error: unsupported architecture: $arch"; exit 1 ;; \
+    esac \
+    && wget -q "https://github.com/aptible/supercronic/releases/download/v0.2.29/${_cronic_fname}" \
+    -O /usr/bin/supercronic \
+    && chmod +x /usr/bin/supercronic \
+    && mkdir -p /etc/supercronic \
+    && echo "*/1 * * * * php ${ROOT}/artisan schedule:run --no-interaction" > /etc/supercronic/laravel
 
-RUN userdel -r ubuntu
-RUN groupadd --force -g $WWWGROUP sail
-RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
+RUN userdel --remove --force www-data \
+    && groupadd --force -g ${WWWGROUP} ${USER} \
+    && useradd -ms /bin/bash --no-log-init --no-user-group -g ${WWWGROUP} -u ${WWWUSER} ${USER} \
+    && setcap -r /usr/local/bin/frankenphp
 
-COPY start-container /usr/local/bin/start-container
-COPY setup-container /usr/local/bin/setup-container
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY php.ini /etc/php/8.4/cli/conf.d/99-sail.ini
-COPY . /var/www/html
+RUN chown -R ${USER}:${USER} ${ROOT} /var/{log,run} \
+    && chmod -R a+rw ${ROOT} /var/{log,run}
 
-RUN chown -R sail:sail /var/www/html
+RUN cp ${PHP_INI_DIR}/php.ini-production ${PHP_INI_DIR}/php.ini
 
-RUN chmod +x /usr/local/bin/start-container /usr/local/bin/setup-container
+USER ${USER}
 
-USER sail
+COPY --link --chown=${WWWUSER}:${WWWUSER} --from=vendor /usr/bin/composer /usr/bin/composer
 
-EXPOSE 80/tcp
+COPY --link --chown=${WWWUSER}:${WWWUSER} docker/config/supervisord.conf /etc/
+COPY --link --chown=${WWWUSER}:${WWWUSER} docker/config/octane/FrankenPHP/supervisord.frankenphp.conf /etc/supervisor/conf.d/
+COPY --link --chown=${WWWUSER}:${WWWUSER} docker/config/supervisord.*.conf /etc/supervisor/conf.d/
+COPY --link --chown=${WWWUSER}:${WWWUSER} docker/config/start-container /usr/local/bin/start-container
+COPY --link --chown=${WWWUSER}:${WWWUSER} docker/config/healthcheck /usr/local/bin/healthcheck
+COPY --link --chown=${WWWUSER}:${WWWUSER} docker/config/php.ini ${PHP_INI_DIR}/conf.d/99-octane.ini
+
+RUN chmod +x /usr/local/bin/start-container /usr/local/bin/healthcheck
+
+###########################################
+
+FROM base AS common
+
+USER ${USER}
+
+COPY --link --chown=${WWWUSER}:${WWWUSER} composer.json composer.lock ./
+
+RUN composer install \
+    --no-dev \
+    --no-interaction \
+    --no-autoloader \
+    --no-ansi \
+    --no-scripts \
+    --audit
+
+###########################################
+# Build frontend assets with Bun
+###########################################
+
+FROM oven/bun:${BUN_VERSION} AS build
+
+ARG APP_ENV
+
+ENV ROOT=/var/www/html \
+    APP_ENV=${APP_ENV} \
+    NODE_ENV=${APP_ENV:-production}
+
+WORKDIR ${ROOT}
+
+COPY --link package.json bun.lock* ./
+
+RUN bun install --frozen-lockfile
+
+COPY --link . .
+COPY --link --from=common ${ROOT}/vendor vendor
+
+RUN bun run build
+
+###########################################
+
+FROM common AS runner
+
+USER ${USER}
+
+ENV WITH_HORIZON=false \
+    WITH_SCHEDULER=false \
+    WITH_REVERB=false
+
+COPY --link --chown=${WWWUSER}:${WWWUSER} . .
+COPY --link --chown=${WWWUSER}:${WWWUSER} --from=build ${ROOT}/public public
+
+RUN mkdir -p \
+    storage/framework/{sessions,views,cache,testing} \
+    storage/logs \
+    bootstrap/cache && chmod -R a+rw storage
+
+RUN composer install \
+    --classmap-authoritative \
+    --no-interaction \
+    --no-ansi \
+    --no-dev \
+    && composer clear-cache
+
+EXPOSE 8000
+EXPOSE 443
+EXPOSE 443/udp
+EXPOSE 2019
+EXPOSE 8080
 
 ENTRYPOINT ["start-container"]
+
+HEALTHCHECK --start-period=5s --interval=2s --timeout=5s --retries=8 CMD healthcheck || exit 1
