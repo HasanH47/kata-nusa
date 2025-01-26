@@ -11,7 +11,7 @@ npm run build
 
 # Run Laravel setup commands
 php artisan storage:link
-php artisan migrate
+php artisan migrate --force
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
