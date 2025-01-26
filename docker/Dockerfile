@@ -63,9 +63,11 @@ RUN groupadd --force -g $WWWGROUP sail
 RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
 
 COPY docker/start-container /usr/local/bin/start-container
+COPY docker/setup-container /usr/local/bin/setup-container
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/php.ini /etc/php/8.4/cli/conf.d/99-sail.ini
-RUN chmod +x /usr/local/bin/start-container
+COPY . /var/www/html
+RUN chmod +x /usr/local/bin/start-container /usr/local/bin/setup-container
 
 EXPOSE 80/tcp
 
