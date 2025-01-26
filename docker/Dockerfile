@@ -67,6 +67,9 @@ COPY docker/setup-container /usr/local/bin/setup-container
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/php.ini /etc/php/8.4/cli/conf.d/99-sail.ini
 COPY . /var/www/html
+
+RUN chown -R sail:sail /var/www/html
+
 RUN chmod +x /usr/local/bin/start-container /usr/local/bin/setup-container
 
 EXPOSE 80/tcp
