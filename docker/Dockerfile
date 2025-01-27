@@ -2,6 +2,7 @@ FROM ubuntu:24.04
 
 LABEL maintainer="Taylor Otwell"
 
+ARG WWWUSER="sail"
 ARG WWWGROUP=1000
 ARG NODE_VERSION=22
 ARG MYSQL_CLIENT="mysql-client"
@@ -14,7 +15,7 @@ ENV TZ=Asia/Jakarta
 ENV SUPERVISOR_PHP_COMMAND="/usr/bin/php -d variables_order=EGPCS /var/www/html/artisan octane:start --server=frankenphp --host=0.0.0.0 --admin-port=2019 --port='${APP_PORT:-80}'"
 ENV SUPERVISOR_PHP_USER="sail"
 
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone
 
 RUN echo "Acquire::http::Pipeline-Depth 0;" > /etc/apt/apt.conf.d/99custom && \
     echo "Acquire::http::No-Cache true;" >> /etc/apt/apt.conf.d/99custom && \
@@ -49,8 +50,8 @@ RUN apt-get update && apt-get upgrade -y \
     && echo "deb [signed-by=/etc/apt/keyrings/pgdg.gpg] http://apt.postgresql.org/pub/repos/apt noble-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
     && apt-get update \
     && apt-get install -y yarn \
-    && apt-get install -y $MYSQL_CLIENT \
-    && apt-get install -y postgresql-client-$POSTGRES_VERSION \
+    && apt-get install -y ${MYSQL_CLIENT} \
+    && apt-get install -y postgresql-client-${POSTGRES_VERSION} \
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -58,15 +59,17 @@ RUN apt-get update && apt-get upgrade -y \
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.4
 
 RUN userdel -r ubuntu
-RUN groupadd --force -g $WWWGROUP sail
-RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
+RUN groupadd --force -g ${WWWGROUP} ${WWWUSER}
+RUN useradd -ms /bin/bash --no-user-group -g ${WWWGROUP} -u 1337 ${WWWUSER}
 
 COPY docker/start-container /usr/local/bin/start-container
 COPY docker/setup-container /usr/local/bin/setup-container
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/php.ini /etc/php/8.4/cli/conf.d/99-sail.ini
 
-COPY --chown=${SUPERVISOR_PHP_USER}:${SUPERVISOR_PHP_USER} . /var/www/html
+COPY . /var/www/html
+
+RUN chown -R ${WWWUSER}:${WWWGROUP} /var/www/html
 
 RUN chmod +x /usr/local/bin/start-container /usr/local/bin/setup-container
 
