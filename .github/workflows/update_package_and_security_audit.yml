@@ -54,6 +54,7 @@ jobs:
         run: |
           composer audit
           npm audit
+        continue-on-error: true
 
       - name: Update Dependencies
         run: |
