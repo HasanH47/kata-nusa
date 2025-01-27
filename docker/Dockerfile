@@ -66,11 +66,9 @@ COPY docker/setup-container /usr/local/bin/setup-container
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/php.ini /etc/php/8.4/cli/conf.d/99-sail.ini
 
-COPY --chown=${SUPERVISOR_PHP_USER}:${WWWGROUP} . /var/www/html
+COPY --chown=${SUPERVISOR_PHP_USER}:${SUPERVISOR_PHP_USER} . /var/www/html
 
 RUN chmod +x /usr/local/bin/start-container /usr/local/bin/setup-container
-
-USER ${SUPERVISOR_PHP_USER}
 
 EXPOSE 80/tcp
 
