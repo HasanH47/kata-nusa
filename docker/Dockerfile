@@ -33,7 +33,7 @@ LABEL org.opencontainers.image.licenses=MIT
 
 ARG WWWUSER=1000
 ARG WWWGROUP=1000
-ARG TZ=UTC
+ARG TZ=Asia/Jakarta
 ARG APP_DIR=/var/www/html
 ARG APP_ENV
 ARG APP_HOST
