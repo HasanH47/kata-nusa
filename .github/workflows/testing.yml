@@ -46,6 +46,9 @@ jobs:
           composer install --prefer-dist --no-interaction --no-progress
           npm ci
 
+      - name: Build Assets
+        run: npm run build
+
       - name: Create SQLite database file
         run: touch database.sqlite
 
