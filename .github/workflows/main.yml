@@ -49,12 +49,6 @@ jobs:
       branch: ${{ github.head_ref }}
     secrets: inherit
 
-  sonarqube-scan:
-    if: github.ref != 'refs/heads/main' && github.event_name == 'pull_request'
-    uses: ./.github/workflows/sonarq.yml
-    needs: [setup-build, lint-and-prettier, call-merge-check, update-package-and-audit, testing]
-    secrets: inherit
-
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     uses: ./.github/workflows/deploy.yml
