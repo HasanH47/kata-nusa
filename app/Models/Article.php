@@ -15,7 +15,7 @@ use WendellAdriel\Lift\Lift;
 
 class Article extends Model
 {
-    use HasSEO, Lift, HasFactory;
+    use HasFactory, HasSEO, Lift;
 
     #[Cast('int')]
     #[Column(name: 'author_id')]
@@ -73,8 +73,13 @@ class Article extends Model
     protected function thumbnail(): Attribute
     {
         return Attribute::make(
-            get: fn () => asset('storage/articles/thumbnails/' . $this->getRawOriginal('slug') . '/' . $this->getRawOriginal('thumbnail')),
-            set: fn ($value) => $value
+            get: fn() => asset(
+                'storage/articles/thumbnails/' .
+                    $this->getRawOriginal('slug') .
+                    '/' .
+                    $this->getRawOriginal('thumbnail'),
+            ),
+            set: fn($value) => $value,
         );
     }
 

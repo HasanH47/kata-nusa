@@ -21,13 +21,13 @@ class HomeControllerTest extends TestCase
     {
         $author = Author::factory()->create();
 
-        Article::factory()->count(1000)->create([
-            'author_id' => $author->id,
-        ]);
+        Article::factory()
+            ->count(1000)
+            ->create([
+                'author_id' => $author->id,
+            ]);
 
-        $this->get(route('about'))
-            ->assertStatus(200)
-            ->assertSee('Tentang KataNusa');
+        $this->get(route('about'))->assertStatus(200)->assertSee('Tentang KataNusa');
     }
 
     public function test_trending()

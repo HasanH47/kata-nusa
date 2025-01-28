@@ -69,23 +69,22 @@ class HomeController extends Controller
     public function trending(TrendingRequest $request)
     {
         $period = $request->input('period', 'daily');
-        $query = Article::with(['author', 'articleComments', 'articleCategories'])
-            ->where('is_published', true);
+        $query = Article::with(['author', 'articleComments', 'articleCategories'])->where('is_published', true);
 
         switch ($period) {
             case 'monthly':
-            $query->where('updated_at', '>=', Carbon::now()->subMonth());
-            break;
+                $query->where('updated_at', '>=', Carbon::now()->subMonth());
+                break;
             case 'weekly':
-            $query->where('updated_at', '>=', Carbon::now()->subWeek());
-            break;
+                $query->where('updated_at', '>=', Carbon::now()->subWeek());
+                break;
             case 'yearly':
-            $query->where('updated_at', '>=', Carbon::now()->subYear());
-            break;
+                $query->where('updated_at', '>=', Carbon::now()->subYear());
+                break;
             case 'daily':
             default:
-            $query->where('updated_at', '>=', Carbon::now()->subDay());
-            break;
+                $query->where('updated_at', '>=', Carbon::now()->subDay());
+                break;
         }
 
         $articles = $query->orderBy('views', 'desc')->limit(10)->get();

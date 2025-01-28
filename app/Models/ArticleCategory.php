@@ -22,11 +22,11 @@ class ArticleCategory extends Model
     #[Fillable]
     public ?int $categoryId;
 
-/**
- * Get the article that owns the ArticleCategory.
- *
- * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
- */
+    /**
+     * Get the article that owns the ArticleCategory.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function article()
     {
         return $this->belongsTo(Article::class);

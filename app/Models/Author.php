@@ -13,7 +13,7 @@ use WendellAdriel\Lift\Lift;
 
 class Author extends Model
 {
-    use Lift, HasFactory;
+    use HasFactory, Lift;
 
     #[Cast('int')]
     #[Column(name: 'user_id')]
@@ -58,8 +58,10 @@ class Author extends Model
     protected function avatar(): Attribute
     {
         return Attribute::make(
-            get: fn () => asset('storage/authors/avatars/' . $this->getRawOriginal('uuid') . '/' . $this->getRawOriginal('avatar')),
-            set: fn ($value) => $value
+            get: fn() => asset(
+                'storage/authors/avatars/' . $this->getRawOriginal('uuid') . '/' . $this->getRawOriginal('avatar'),
+            ),
+            set: fn($value) => $value,
         );
     }
 

@@ -22,17 +22,14 @@ class TrendingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'period' => [
-                'nullable',
-                'in:daily,weekly,monthly,yearly'
-            ]
+            'period' => ['nullable', 'in:daily,weekly,monthly,yearly'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'period.in' => 'Period must be daily, weekly, monthly, or yearly.'
+            'period.in' => 'Period must be daily, weekly, monthly, or yearly.',
         ];
     }
 }
