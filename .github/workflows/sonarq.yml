@@ -18,8 +18,12 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: coverage.xml
+          name: coverage-xml
           path: .
+
+      - name: Extract Coverage Report
+        run: |
+          unzip coverage-xml.zip
 
       - uses: SonarSource/sonarqube-scan-action@v4
         env:
