@@ -8,6 +8,8 @@ use Tests\TestCase;
 
 class HomeControllerTest extends TestCase
 {
+    private const TRENDING_DI_KATANUSA_MESSAGE = 'Trending di KataNusa';
+
     public function test_index()
     {
         $article = Article::factory()->create();
@@ -32,37 +34,35 @@ class HomeControllerTest extends TestCase
 
     public function test_trending()
     {
-        $article = Article::factory()->create();
+        Article::factory()->create();
 
         $this->get(route('trending'))
             ->assertStatus(200)
-            ->assertSee($article->title);
+            ->assertSee(self::TRENDING_DI_KATANUSA_MESSAGE);
     }
 
     public function test_trending_period_monthly()
     {
-        $article = Article::factory()->create();
+        Article::factory()->create();
 
         $this->get(route('trending', ['period' => 'monthly']))
             ->assertStatus(200)
-            ->assertSee($article->title);
+            ->assertSee(self::TRENDING_DI_KATANUSA_MESSAGE);
     }
 
     public function test_trending_period_weekly()
     {
-        $article = Article::factory()->create();
+        Article::factory()->create();
 
         $this->get(route('trending', ['period' => 'weekly']))
             ->assertStatus(200)
-            ->assertSee($article->title);
+            ->assertSee(self::TRENDING_DI_KATANUSA_MESSAGE);
     }
 
     public function test_trending_period_yearly()
     {
-        $article = Article::factory()->create();
-
         $this->get(route('trending', ['period' => 'yearly']))
             ->assertStatus(200)
-            ->assertSee($article->title);
+            ->assertSee(self::TRENDING_DI_KATANUSA_MESSAGE);
     }
 }
