@@ -21,10 +21,6 @@ jobs:
           name: coverage-xml
           path: .
 
-      - name: Extract Coverage Report
-        run: |
-          unzip coverage-xml.zip
-
       - uses: SonarSource/sonarqube-scan-action@v4
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
