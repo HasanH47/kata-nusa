@@ -11,7 +11,7 @@ use WendellAdriel\Lift\Lift;
 
 class ArticleCategory extends Model
 {
-    use Lift, HasFactory;
+    use HasFactory, Lift;
 
     #[Cast('int')]
     #[Column(name: 'article_id')]

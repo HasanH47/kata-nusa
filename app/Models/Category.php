@@ -11,7 +11,7 @@ use WendellAdriel\Lift\Lift;
 
 class Category extends Model
 {
-    use Lift, HasFactory;
+    use HasFactory, Lift;
 
     #[Cast('string')]
     #[Column(name: 'name')]

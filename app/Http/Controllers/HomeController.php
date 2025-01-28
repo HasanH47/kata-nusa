@@ -25,7 +25,7 @@ class HomeController extends Controller
 
         $trendingCategories = Category::with(['articleCategories', 'articleCategories.article'])
             ->whereHas('articleCategories.article', function ($query) {
-            $query->where('is_published', true);
+                $query->where('is_published', true);
             })
             ->limit(5)
             ->get();
