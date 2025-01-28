@@ -7,32 +7,21 @@ on:
   pull_request:
     branches:
       - '**'
-    types: [opened, synchronize, reopened]
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   setup-build:
     uses: ./.github/workflows/setup_build.yml
-    with:
-      branch: ${{ github.ref }}
 
   call-merge-check:
     if: github.ref != 'refs/heads/main' && github.event_name == 'pull_request'
     uses: ./.github/workflows/merge_request.yml
     needs: setup-build
-    with:
-      branch: ${{ github.head_ref }}
     secrets: inherit
 
   lint-and-prettier:
     if: github.ref != 'refs/heads/main' && github.event_name == 'pull_request'
     uses: ./.github/workflows/lint_and_prettier.yml
     needs: [setup-build, call-merge-check]
-    with:
-      branch: ${{ github.head_ref }}
     secrets: inherit
 
   testing:
@@ -45,8 +34,6 @@ jobs:
     if: github.ref != 'refs/heads/main' && github.event_name == 'pull_request'
     uses: ./.github/workflows/update_package_and_security_audit.yml
     needs: [setup-build, lint-and-prettier, call-merge-check, testing]
-    with:
-      branch: ${{ github.head_ref }}
     secrets: inherit
 
   deploy:

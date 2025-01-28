@@ -2,25 +2,14 @@ name: Lint and Prettier
 
 on:
   workflow_call:
-    inputs:
-      branch:
-        required: true
-        type: string
   workflow_dispatch:
 
 jobs:
   lint-and-prettier:
     runs-on: ubuntu-latest
 
-    concurrency:
-      group: lint-${{ github.ref }}
-      cancel-in-progress: true
-
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.branch }}
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -70,13 +59,13 @@ jobs:
 
       - name: Commit and Push changes
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GH_PAT }}
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git add .
             COMMIT_MESSAGE=$(git log -1 --pretty=%B)
             git commit -m "linting: $COMMIT_MESSAGE"
-            git push https://$GH_TOKEN@github.com/${{ github.repository }}.git "HEAD:${{ inputs.branch }}"
+            git push origin "HEAD:${{ github.ref }}"
           else
             echo "No changes to commit"
           fi
