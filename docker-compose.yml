@@ -11,6 +11,7 @@ services:
     ports:
       - '${APP_PORT:-80}:80'
       - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+      - 9100:9100
     environment:
       WWWUSER: '${WWWUSER}'
       LARAVEL_SAIL: 1
@@ -26,6 +27,7 @@ services:
       - sail
     depends_on:
       - pgsql
+    command: sh -c "php -S 0.0.0.0:9100 -t /var/www/html/coverage-report & npm run dev"
   pgsql:
     image: 'postgres:17'
     ports:

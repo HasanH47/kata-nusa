@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use WendellAdriel\Lift\Attributes\Cast;
 use WendellAdriel\Lift\Attributes\Column;
@@ -10,7 +11,7 @@ use WendellAdriel\Lift\Lift;
 
 class Category extends Model
 {
-    use Lift;
+    use HasFactory, Lift;
 
     #[Cast('string')]
     #[Column(name: 'name')]

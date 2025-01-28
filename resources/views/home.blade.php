@@ -17,12 +17,12 @@
             @if ($articles->count() > 0)
             @foreach($articles as $article)
             <article class="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow">
-                <img src="{{ asset('storage/articles/thumbnails/' . $article->thumbnail) }}" alt="Article thumbnail" class="w-full h-48 object-cover mb-4">
+                <img src="{{ $article->thumbnail }}" alt="{{ $article->title }}" class="w-full h-48 object-cover mb-4">
                 <div class="flex items-center space-x-4 mb-4">
-                    <img src="{{ asset('storage/authors/avatars/' . $article->author->avatar) }}" alt="Author" class="w-10 h-10 rounded-full">
+                    <img src="{{ $article->author->avatar }}" alt="{{ $article->author->username }}" class="w-10 h-10 rounded-full">
                     <div>
-                        <h3 class="font-medium text-gray-900">Penulis {{ $article->author->user->name }}</h3>
-                        <p class="text-sm text-gray-500">{{ date('d M Y') }}</p>
+                        <h3 class="font-medium text-gray-900">{{ $article->author->user->name }}</h3>
+                        <p class="text-sm text-gray-500">{{ $article->updated_at }}</p>
                     </div>
                 </div>
 
@@ -62,6 +62,11 @@
                 </h2>
             </article>
             @endif
+        </div>
+
+        <!-- Pagination Links -->
+        <div class="mt-8">
+            {{ $articles->links('vendor.pagination.tailwind') }}
         </div>
     </div>
 
@@ -112,10 +117,10 @@
                     @foreach($trendingAuthors as $trendingAuthor)
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-3">
-                        <img src="{{ asset('storage/authors/avatars/' . $trendingAuthor->avatar) }}" alt="Profile" class="w-10 h-10 rounded-full">
+                        <img src="{{ $trendingAuthor->avatar }}" alt="{{ $trendingAuthor->username }}" class="w-10 h-10 rounded-full">
                         <div>
-                            <h3 class="font-medium text-gray-900">Penulis {{ $trendingAuthor->user->name }}</h3>
-                            <p class="text-sm text-gray-500">{{ $trendingAuthor->authorFollowers->count() }} pengikut</p>
+                            <h3 class="font-medium text-gray-900">{{ $trendingAuthor->user->name }}</h3>
+                            <p class="text-sm text-gray-500">{{ $trendingAuthor->followers->count() }} pengikut</p>
                         </div>
                     </div>
                     <button class="px-4 py-1 border border-gray-900 rounded-full text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white transition-colors">

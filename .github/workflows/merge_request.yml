@@ -2,11 +2,6 @@ name: Merge Request Check
 
 on:
   workflow_call:
-    inputs:
-      branch:
-        description: 'Branch to merge into main'
-        required: true
-        type: string
   workflow_dispatch:
 
 jobs:
@@ -17,7 +12,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ inputs.branch }}
 
       - name: Setup Git
         env:
@@ -32,12 +26,12 @@ jobs:
           git checkout main
           git pull origin main
 
-          git checkout ${{ inputs.branch }}
+          git checkout ${{ github.head_ref }}
 
           git merge --no-commit --no-ff main
 
           if [ $? -ne 0 ]; then
-            echo "::error::Merge conflicts detected between ${{ inputs.branch }} and main"
+            echo "::error::Merge conflicts detected between ${{ github.ref }} and main"
             git merge --abort
             exit 1
           else

@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Ramsey\Uuid\Uuid;
 use WendellAdriel\Lift\Attributes\Cast;
 use WendellAdriel\Lift\Attributes\Column;
 use WendellAdriel\Lift\Attributes\Fillable;
@@ -10,7 +13,7 @@ use WendellAdriel\Lift\Lift;
 
 class Author extends Model
 {
-    use Lift;
+    use HasFactory, Lift;
 
     #[Cast('int')]
     #[Column(name: 'user_id')]
@@ -41,6 +44,26 @@ class Author extends Model
     #[Column(name: 'website')]
     #[Fillable]
     public string $website;
+
+    #[Cast('string')]
+    #[Column(name: 'uuid', default: 'generateUuid')]
+    #[Fillable]
+    public string $uuid;
+
+    public function generateUuid(): string
+    {
+        return Uuid::uuid4()->toString();
+    }
+
+    protected function avatar(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => asset(
+                'storage/authors/avatars/' . $this->getRawOriginal('uuid') . '/' . $this->getRawOriginal('avatar'),
+            ),
+            set: fn($value) => $value,
+        );
+    }
 
     /**
      * The user that owns the author.
