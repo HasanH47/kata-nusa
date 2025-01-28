@@ -46,6 +46,9 @@ jobs:
           composer install --prefer-dist --no-interaction --no-progress
           npm ci
 
+      - name: Create SQLite database file
+        run: touch database.sqlite
+
       - name: Copy .env.testing to .env
         run: cp .env.testing .env
 
