@@ -86,6 +86,7 @@ class Article extends Model
     public function setEstimatedReadingTime(): int
     {
         $words = Str::wordCount($this->body);
+
         return (int) ceil($words / 200);
     }
 
