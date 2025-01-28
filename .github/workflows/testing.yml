@@ -62,7 +62,9 @@ jobs:
         run: php artisan migrate --force
 
       - name: Run tests
-        run: php artisan test --coverage-html=coverage-report
+        run: |
+              php artisan test --coverage-html=coverage-report
+              php artisan test --coverage-clover=coverage.xml
 
       - name: Upload coverage report as artifact
         uses: actions/upload-artifact@v4
