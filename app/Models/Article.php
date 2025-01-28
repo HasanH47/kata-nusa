@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
@@ -13,7 +15,7 @@ use WendellAdriel\Lift\Lift;
 
 class Article extends Model
 {
-    use HasSEO, Lift;
+    use HasSEO, Lift, HasFactory;
 
     #[Cast('int')]
     #[Column(name: 'author_id')]
@@ -68,6 +70,14 @@ class Article extends Model
         return $title . '-' . $ulid;
     }
 
+    protected function thumbnail(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => asset('storage/articles/thumbnails/' . $this->getRawOriginal('slug') . '/' . $this->getRawOriginal('thumbnail')),
+            set: fn ($value) => $value
+        );
+    }
+
     /**
      * The author of the article.
      *
@@ -86,5 +96,15 @@ class Article extends Model
     public function articleComments()
     {
         return $this->hasMany(ArticleComment::class);
+    }
+
+    /**
+     * Get the article categories associated with the article.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function articleCategories()
+    {
+        return $this->hasMany(ArticleCategory::class);
     }
 }

@@ -35,10 +35,18 @@ jobs:
       branch: ${{ github.head_ref }}
     secrets: inherit
 
+  testing:
+    if: github.ref != 'refs/heads/main' && github.event_name == 'pull_request'
+    uses: ./.github/workflows/testing.yml
+    needs: [setup-build, lint-and-prettier, call-merge-check]
+    with:
+      branch: ${{ github.head_ref }}
+    secrets: inherit
+
   update-package-and-audit:
     if: github.ref != 'refs/heads/main' && github.event_name == 'pull_request'
     uses: ./.github/workflows/update_package_and_security_audit.yml
-    needs: [setup-build, lint-and-prettier, call-merge-check]
+    needs: [setup-build, lint-and-prettier, call-merge-check, testing]
     with:
       branch: ${{ github.head_ref }}
     secrets: inherit
@@ -46,7 +54,9 @@ jobs:
   sonarqube-scan:
     if: github.ref != 'refs/heads/main' && github.event_name == 'pull_request'
     uses: ./.github/workflows/sonarq.yml
-    needs: [setup-build, lint-and-prettier, call-merge-check, update-package-and-audit]
+    needs: [setup-build, lint-and-prettier, call-merge-check, update-package-and-audit, testing]
+    with:
+      branch: ${{ github.head_ref }}
     secrets: inherit
 
   deploy:
