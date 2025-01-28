@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndexRequest;
 use App\Http\Requests\TrendingRequest;
 use App\Models\Article;
 use App\Models\Author;
@@ -11,22 +12,25 @@ use RalphJSmit\Laravel\SEO\Support\SEOData;
 
 class HomeController extends Controller
 {
-    public function index($page = 5)
+    public function index(IndexRequest $request)
     {
+        $page = $request->input('page', 1);
+
         $articles = Article::with(['author', 'articleComments'])
             ->where('is_published', true)
             ->orderBy('created_at', 'desc')
-            ->paginate(5, ['*'], 'page', $page);
+            ->paginate(10, ['*'], 'page', $page);
 
-        $trendingArticles = Article::where('is_published', true)->orderBy('views', 'desc')->take(5)->get();
+        $trendingArticles = Article::where('is_published', true)->orderBy('views', 'desc')->limit(5)->get();
 
         $trendingCategories = Category::with(['articleCategories', 'articleCategories.article'])
             ->whereHas('articleCategories.article', function ($query) {
-                $query->where('is_published', true);
+            $query->where('is_published', true);
             })
+            ->limit(5)
             ->get();
 
-        $trendingAuthors = Author::withCount('followers')->orderBy('followers_count', 'desc')->take(5)->get();
+        $trendingAuthors = Author::withCount('followers')->orderBy('followers_count', 'desc')->limit(5)->get();
 
         return view('home', [
             'articles' => $articles,

@@ -32,15 +32,15 @@
 
     <!-- Trending Articles -->
     <div class="space-y-6">
-        @foreach($articles as $article)
+        @foreach($articles as $key => $article)
         <article class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
             <div class="flex items-start space-x-6">
-                <span class="text-4xl font-bold text-gray-200">{{ str_pad($article, 2, '0', STR_PAD_LEFT) }}</span>
+                <span class="text-4xl font-bold text-gray-200">{{ str_pad($key + 1, 2, '0', STR_PAD_LEFT) }}</span>
                 <div class="flex-1">
                     <div class="flex items-center space-x-4 mb-4">
                         <img src="{{ $article->author->avatar }}" alt="{{ $article->author->username }}" class="w-10 h-10 rounded-full">
                         <div>
-                            <h3 class="font-medium text-gray-900">Penulis {{ $article->author->user->name }}</h3>
+                            <h3 class="font-medium text-gray-900">{{ $article->author->user->name }}</h3>
                             <p class="text-sm text-gray-500">{{ $article->updated_at }}</p>
                         </div>
                     </div>

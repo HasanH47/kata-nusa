@@ -83,6 +83,12 @@ class Article extends Model
         );
     }
 
+    public function setEstimatedReadingTime(): int
+    {
+        $words = str_word_count($this->body);
+        return ceil($words / 200);
+    }
+
     /**
      * The author of the article.
      *

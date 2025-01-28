@@ -21,7 +21,7 @@
                 <div class="flex items-center space-x-4 mb-4">
                     <img src="{{ $article->author->avatar }}" alt="{{ $article->author->username }}" class="w-10 h-10 rounded-full">
                     <div>
-                        <h3 class="font-medium text-gray-900">Penulis {{ $article->author->user->name }}</h3>
+                        <h3 class="font-medium text-gray-900">{{ $article->author->user->name }}</h3>
                         <p class="text-sm text-gray-500">{{ $article->updated_at }}</p>
                     </div>
                 </div>
@@ -62,6 +62,11 @@
                 </h2>
             </article>
             @endif
+        </div>
+
+        <!-- Pagination Links -->
+        <div class="mt-8">
+            {{ $articles->links('vendor.pagination.tailwind') }}
         </div>
     </div>
 
@@ -114,7 +119,7 @@
                     <div class="flex items-center space-x-3">
                         <img src="{{ $trendingAuthor->avatar }}" alt="{{ $trendingAuthor->username }}" class="w-10 h-10 rounded-full">
                         <div>
-                            <h3 class="font-medium text-gray-900">Penulis {{ $trendingAuthor->user->name }}</h3>
+                            <h3 class="font-medium text-gray-900">{{ $trendingAuthor->user->name }}</h3>
                             <p class="text-sm text-gray-500">{{ $trendingAuthor->followers->count() }} pengikut</p>
                         </div>
                     </div>
