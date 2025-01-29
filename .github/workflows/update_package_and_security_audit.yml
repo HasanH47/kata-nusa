@@ -75,7 +75,7 @@ jobs:
             git add package.json
             COMMIT_MESSAGE=$(git log -1 --pretty=%B)
             git commit -m "Update packages and run security audit: $COMMIT_MESSAGE"
-            git push origin "HEAD:${{ github.ref }}"
+            git push origin "HEAD:${{ github.head_ref }}"
           else
             echo "No changes to commit"
           fi
