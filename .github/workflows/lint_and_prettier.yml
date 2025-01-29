@@ -65,6 +65,7 @@ jobs:
             git add .
             COMMIT_MESSAGE=$(git log -1 --pretty=%B)
             git commit -m "linting: $COMMIT_MESSAGE"
+            git pull --rebase origin "${{ github.head_ref }}"
             git push origin "HEAD:${{ github.head_ref }}"
           else
             echo "No changes to commit"
