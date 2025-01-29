@@ -51,9 +51,13 @@ jobs:
       - name: Run migrations
         run: php artisan migrate --force
 
-      - name: Run tests
-        run: |
-              php artisan test --parallel --processes=4 --coverage-html=coverage-report
+      - name: Run tests with retry
+        uses: nick-invision/retry@v3
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          retry_wait_seconds: 10
+          command: php artisan test --parallel --processes=4 --coverage-html=coverage-report
 
       - name: Upload coverage report as artifact
         uses: actions/upload-artifact@v4
