@@ -16,12 +16,12 @@ class ArticleCategory extends Model
     #[Cast('int')]
     #[Column(name: 'article_id')]
     #[Fillable]
-    public ?int $articleId;
+    public ?int $article_id;
 
     #[Cast('int')]
     #[Column(name: 'category_id')]
     #[Fillable]
-    public ?int $categoryId;
+    public ?int $category_id;
 
     /**
      * Get the article that owns the ArticleCategory.

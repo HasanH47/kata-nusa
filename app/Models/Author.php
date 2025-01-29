@@ -18,37 +18,37 @@ class Author extends Model
     #[Cast('int')]
     #[Column(name: 'user_id')]
     #[Fillable]
-    public int $userId;
+    public ?int $user_id;
 
     #[Cast('string')]
     #[Column(name: 'username')]
     #[Fillable]
-    public string $username;
+    public ?string $username;
 
     #[Cast('string')]
     #[Column(name: 'bio')]
     #[Fillable]
-    public string $bio;
+    public ?string $bio;
 
     #[Cast('string')]
     #[Column(name: 'avatar')]
     #[Fillable]
-    public string $avatar;
+    public ?string $avatar;
 
     #[Cast('string')]
     #[Column(name: 'address')]
     #[Fillable]
-    public string $address;
+    public ?string $address;
 
     #[Cast('string')]
     #[Column(name: 'website')]
     #[Fillable]
-    public string $website;
+    public ?string $website;
 
     #[Cast('string')]
     #[Column(name: 'uuid', default: 'generateUuid')]
     #[Fillable]
-    public string $uuid;
+    public ?string $uuid;
 
     public function generateUuid(): string
     {
@@ -58,10 +58,10 @@ class Author extends Model
     protected function avatar(): Attribute
     {
         return Attribute::make(
-            get: fn() => asset(
-                'storage/authors/avatars/' . $this->getRawOriginal('uuid') . '/' . $this->getRawOriginal('avatar'),
-            ),
-            set: fn($value) => $value,
+            get: fn($avatar) => $avatar
+                ? asset('storage/authors/avatars/' . $this->getRawOriginal('uuid') . '/' . $avatar)
+                : null,
+            set: fn($avatar) => $avatar ? basename($avatar) : null,
         );
     }
 

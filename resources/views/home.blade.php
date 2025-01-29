@@ -81,7 +81,7 @@
                         <a href="{{ route('articles.show', $trendingArticle->slug) }}" class="flex items-start space-x-4 group">
                             <span class="text-2xl font-bold text-gray-300 group-hover:text-gray-400">0{{ $loop->iteration }}</span>
                             <div>
-                                <h3 class="font-medium text-gray-900 group-hover:text-gray-700">Artikel Trending {{ $trendingArticle->title }}</h3>
+                                <h3 class="font-medium text-gray-900 group-hover:text-gray-700">{{ $trendingArticle->title }}</h3>
                                 <p class="text-sm text-gray-500">{{ $trendingArticle->views }} pembaca</p>
                             </div>
                         </a>

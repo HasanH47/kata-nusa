@@ -29,7 +29,7 @@ class TrendingRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'period.in' => 'Period must be daily, weekly, monthly, or yearly.',
+            'period.in' => 'Periode harus harian, mingguan, bulanan, atau tahunan.',
         ];
     }
 }

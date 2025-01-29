@@ -14,9 +14,11 @@ $path = 'routes/web';
 
 // Authentication Routes
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'login'])->name('login');
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
-    Route::get('/register', [AuthController::class, 'register'])->name('register');
+    Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 });
 
 // Public Routes
@@ -39,6 +41,9 @@ require base_path($path . '/authors/author.php');
 Route::middleware('auth')->group(function () use ($path) {
     // Dashboard Routes
     require base_path($path . '/dashboard/dashboard.php');
+
+    // Logout Route
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
 // Fallback Route for 404

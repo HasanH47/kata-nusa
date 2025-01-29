@@ -25,4 +25,12 @@ class IndexRequest extends FormRequest
             'page' => ['integer', 'min:1'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'page.integer' => 'Page harus berupa angka',
+            'page.min' => 'Page minimal harus 1',
+        ];
+    }
 }

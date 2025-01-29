@@ -27,7 +27,6 @@ services:
       - sail
     depends_on:
       - pgsql
-    command: sh -c "php -S 0.0.0.0:9100 -t /var/www/html/coverage-report & npm run dev"
   pgsql:
     image: 'postgres:17'
     ports:

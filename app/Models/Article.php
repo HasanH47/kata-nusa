@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use RalphJSmit\Laravel\SEO\Support\HasSEO;
 use Symfony\Component\Uid\Ulid;
 use WendellAdriel\Lift\Attributes\Cast;
 use WendellAdriel\Lift\Attributes\Column;
@@ -15,12 +14,12 @@ use WendellAdriel\Lift\Lift;
 
 class Article extends Model
 {
-    use HasFactory, HasSEO, Lift;
+    use HasFactory, Lift;
 
     #[Cast('int')]
     #[Column(name: 'author_id')]
     #[Fillable]
-    public ?int $authorId;
+    public ?int $author_id;
 
     #[Cast('string')]
     #[Column(name: 'title')]
@@ -59,7 +58,7 @@ class Article extends Model
     #[Cast('boolean')]
     #[Column(name: 'is_published')]
     #[Fillable]
-    public ?bool $isPublished;
+    public ?bool $is_published;
 
     public function generateSlug(): string
     {
@@ -73,13 +72,10 @@ class Article extends Model
     protected function thumbnail(): Attribute
     {
         return Attribute::make(
-            get: fn() => asset(
-                'storage/articles/thumbnails/' .
-                    $this->getRawOriginal('slug') .
-                    '/' .
-                    $this->getRawOriginal('thumbnail'),
-            ),
-            set: fn($value) => $value,
+            get: fn($thumbnail) => $thumbnail
+                ? asset('storage/articles/thumbnails/' . $this->getRawOriginal('slug') . '/' . $thumbnail)
+                : null,
+            set: fn($thumbnail) => $thumbnail ? basename($thumbnail) : null,
         );
     }
 
