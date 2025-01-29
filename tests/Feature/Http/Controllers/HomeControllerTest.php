@@ -12,9 +12,7 @@ class HomeControllerTest extends TestCase
     {
         Article::factory()->create();
 
-        $this->get(route('home'))
-            ->assertStatus(200)
-            ->assertViewIs('home');
+        $this->get(route('home'))->assertStatus(200)->assertViewIs('home');
     }
 
     public function test_about()
@@ -34,9 +32,7 @@ class HomeControllerTest extends TestCase
     {
         Article::factory()->create();
 
-        $this->get(route('trending'))
-            ->assertStatus(200)
-            ->assertViewIs('trending');
+        $this->get(route('trending'))->assertStatus(200)->assertViewIs('trending');
     }
 
     public function test_trending_period_monthly()

@@ -9,53 +9,53 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthService
 {
-  public function login(array $data)
-  {
-    $credentials = [
-      'email' => $data['email'],
-      'password' => $data['password']
-    ];
+    public function login(array $data)
+    {
+        $credentials = [
+            'email' => $data['email'],
+            'password' => $data['password'],
+        ];
 
-    $remember = $data['remember'];
+        $remember = $data['remember'];
 
-    if (Auth::attempt($credentials, $remember)) {
-      session()->regenerate();
+        if (Auth::attempt($credentials, $remember)) {
+            session()->regenerate();
 
-      return [
-        'status' => true,
-        'message' => 'Login Berhasil!',
-        'intended_url' => redirect()->intended()->getTargetUrl()
-      ];
+            return [
+                'status' => true,
+                'message' => 'Login Berhasil!',
+                'intended_url' => redirect()->intended()->getTargetUrl(),
+            ];
+        }
+
+        return [
+            'status' => false,
+            'message' => 'Email atau password salah!',
+        ];
     }
 
-    return [
-      'status' => false,
-      'message' => 'Email atau password salah!'
-    ];
-  }
+    public function register(array $data)
+    {
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);
 
-  public function register(array $data)
-  {
-    $user = User::create([
-      'name' => $data['name'],
-      'email' => $data['email'],
-      'password' => Hash::make($data['password']),
-    ]);
+        Author::create([
+            'user_id' => $user->id,
+            'username' => $data['username'],
+        ]);
 
-    Author::create([
-      'user_id' => $user->id,
-      'username' => $data['username'],
-    ]);
+        return [
+            'status' => true,
+            'message' => 'Registrasi Berhasil!',
+            'intended_url' => redirect()->intended(route('login'))->getTargetUrl(),
+        ];
+    }
 
-    return [
-      'status' => true,
-      'message' => 'Registrasi Berhasil!',
-      'intended_url' => redirect()->intended(route('login'))->getTargetUrl()
-    ];
-  }
-
-  public function logout()
-  {
-    Auth::logout();
-  }
+    public function logout()
+    {
+        Auth::logout();
+    }
 }

@@ -22,30 +22,16 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => [
-                'required',
-                'string',
-                'max:255',
-            ],
-            'username' => [
-                'required',
-                'string',
-                'max:255',
-                'unique:authors',
-            ],
-            'email' => [
-                'required',
-                'email',
-                'max:255',
-                'unique:users',
-            ],
+            'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:authors'],
+            'email' => ['required', 'email', 'max:255', 'unique:users'],
             'password' => [
                 'required',
                 'string',
                 'min:8',
                 'max:20',
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
-                'confirmed'
+                'confirmed',
             ],
         ];
     }
@@ -68,7 +54,8 @@ class RegisterRequest extends FormRequest
             'password.string' => 'Kata sandi harus berupa string',
             'password.min' => 'Kata sandi harus minimal 8 karakter',
             'password.max' => 'Kata sandi harus kurang dari 20 karakter',
-            'password.regex' => 'Kata sandi harus mengandung setidaknya satu huruf besar, satu huruf kecil, dan satu angka',
+            'password.regex' =>
+                'Kata sandi harus mengandung setidaknya satu huruf besar, satu huruf kecil, dan satu angka',
             'password.confirmed' => 'Kata sandi tidak cocok',
         ];
     }

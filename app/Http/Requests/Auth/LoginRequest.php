@@ -29,20 +29,9 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => [
-                'required',
-                'email',
-            ],
-            'password' => [
-                'required',
-                'string',
-                'min:8',
-                'max:20',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
-            ],
-            'remember' => [
-                'nullable'
-            ],
+            'email' => ['required', 'email'],
+            'password' => ['required', 'string', 'min:8', 'max:20', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'],
+            'remember' => ['nullable'],
         ];
     }
 
@@ -55,7 +44,8 @@ class LoginRequest extends FormRequest
             'password.string' => 'Kata sandi harus berupa string',
             'password.min' => 'Kata sandi harus minimal 8 karakter',
             'password.max' => 'Kata sandi harus kurang dari 20 karakter',
-            'password.regex' => 'Kata sandi harus mengandung setidaknya satu huruf besar, satu huruf kecil, dan satu angka',
+            'password.regex' =>
+                'Kata sandi harus mengandung setidaknya satu huruf besar, satu huruf kecil, dan satu angka',
             'remember.boolean' => 'Remember me harus berupa boolean',
         ];
     }
