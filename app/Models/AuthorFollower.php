@@ -20,5 +20,5 @@ class AuthorFollower extends Model
     #[Cast('int')]
     #[Column(name: 'followed_author_id')]
     #[Fillable]
-    public ?int $followedAuthorId;
+    public ?int $followed_author_id;
 }

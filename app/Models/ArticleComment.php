@@ -15,17 +15,17 @@ class ArticleComment extends Model
     #[Cast('int')]
     #[Column(name: 'article_id')]
     #[Fillable]
-    public ?int $articleId;
+    public ?int $article_id;
 
     #[Cast('int')]
     #[Column(name: 'author_id')]
     #[Fillable]
-    public ?int $authorId;
+    public ?int $author_id;
 
     #[Cast('int')]
     #[Column(name: 'comment_id')]
     #[Fillable]
-    public ?int $commentId;
+    public ?int $comment_id;
 
     #[Cast('string')]
     #[Column(name: 'body')]

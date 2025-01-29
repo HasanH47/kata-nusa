@@ -8,7 +8,6 @@ use App\Models\Article;
 use App\Models\Author;
 use App\Models\Category;
 use Carbon\Carbon;
-use RalphJSmit\Laravel\SEO\Support\SEOData;
 
 class HomeController extends Controller
 {
@@ -37,10 +36,6 @@ class HomeController extends Controller
             'trendingArticles' => $trendingArticles,
             'trendingCategories' => $trendingCategories,
             'trendingAuthors' => $trendingAuthors,
-            'SEOData' => new SEOData(
-                title: 'KataNusa - Beranda',
-                description: 'KataNusa – Menyatukan Cerita dari Seluruh Nusantara',
-            ),
         ]);
     }
 
@@ -54,10 +49,6 @@ class HomeController extends Controller
             'countAuthors' => $this->formatNumber($countAuthors),
             'countArticlePublished' => $this->formatNumber($countArticlePublished),
             'countArticleRead' => $this->formatNumber($countArticleRead),
-            'SEOData' => new SEOData(
-                title: 'Tentang Kami - KataNusa',
-                description: 'KataNusa hadir sebagai platform yang menghubungkan para penulis dan pembaca dari berbagai latar belakang untuk berbagi cerita, pengetahuan, dan inspirasi. Kami percaya bahwa setiap tulisan, baik tentang teknologi, kehidupan, budaya, maupun ide-ide baru, memiliki nilai yang dapat memberikan perspektif segar dalam memahami dunia di sekitar kita. KataNusa adalah tempat bagi semua orang untuk menyuarakan pikiran dan menemukan wawasan baru.',
-            ),
         ]);
     }
 
@@ -95,10 +86,6 @@ class HomeController extends Controller
 
         return view('trending', [
             'articles' => $articles,
-            'SEOData' => new SEOData(
-                title: 'Trending - KataNusa',
-                description: 'KataNusa – Menyatukan Cerita dari Seluruh Nusantara',
-            ),
         ]);
     }
 }

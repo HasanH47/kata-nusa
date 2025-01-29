@@ -1,4 +1,3 @@
-<!-- filepath: /home/hasanh47/Pribadi/kata-nusa/resources/views/vendor/pagination/tailwind.blade.php -->
 @if ($paginator->hasPages())
     <nav role="navigation" aria-label="Pagination Navigation" class="flex items-center justify-between">
         <div class="flex justify-between flex-1 sm:hidden">

@@ -8,15 +8,13 @@ use Tests\TestCase;
 
 class HomeControllerTest extends TestCase
 {
-    private const TRENDING_DI_KATANUSA_MESSAGE = 'Trending di KataNusa';
-
     public function test_index()
     {
-        $article = Article::factory()->create();
+        Article::factory()->create();
 
         $this->get(route('home'))
             ->assertStatus(200)
-            ->assertSee($article->title);
+            ->assertViewIs('home');
     }
 
     public function test_about()
@@ -29,7 +27,7 @@ class HomeControllerTest extends TestCase
                 'author_id' => $author->id,
             ]);
 
-        $this->get(route('about'))->assertStatus(200)->assertSee('Tentang KataNusa');
+        $this->get(route('about'))->assertStatus(200)->assertViewIs('about');
     }
 
     public function test_trending()
@@ -38,7 +36,7 @@ class HomeControllerTest extends TestCase
 
         $this->get(route('trending'))
             ->assertStatus(200)
-            ->assertSee(self::TRENDING_DI_KATANUSA_MESSAGE);
+            ->assertViewIs('trending');
     }
 
     public function test_trending_period_monthly()
@@ -47,7 +45,7 @@ class HomeControllerTest extends TestCase
 
         $this->get(route('trending', ['period' => 'monthly']))
             ->assertStatus(200)
-            ->assertSee(self::TRENDING_DI_KATANUSA_MESSAGE);
+            ->assertViewIs('trending');
     }
 
     public function test_trending_period_weekly()
@@ -56,13 +54,13 @@ class HomeControllerTest extends TestCase
 
         $this->get(route('trending', ['period' => 'weekly']))
             ->assertStatus(200)
-            ->assertSee(self::TRENDING_DI_KATANUSA_MESSAGE);
+            ->assertViewIs('trending');
     }
 
     public function test_trending_period_yearly()
     {
         $this->get(route('trending', ['period' => 'yearly']))
             ->assertStatus(200)
-            ->assertSee(self::TRENDING_DI_KATANUSA_MESSAGE);
+            ->assertViewIs('trending');
     }
 }

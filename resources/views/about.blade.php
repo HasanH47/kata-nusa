@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Tentang - KataNusa')
+
 @section('content')
 <div class="max-w-4xl mx-auto">
     <!-- Hero Section -->

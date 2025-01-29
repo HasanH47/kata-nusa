@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Trending - KataNusa')
+
 @section('content')
 <div class="max-w-7xl mx-auto">
     <h1 class="text-3xl font-bold text-gray-900 mb-8">Trending di KataNusa</h1>
@@ -46,7 +48,7 @@
                     </div>
 
                     <h2 class="text-xl font-bold text-gray-900 mb-2 hover:text-gray-700">
-                        <a href="#">Judul Artikel Trending {{ $article->title }}</a>
+                        <a href="#">{{ $article->title }}</a>
                     </h2>
 
                     <p class="text-gray-600 mb-4">
