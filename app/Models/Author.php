@@ -58,9 +58,9 @@ class Author extends Model
     protected function avatar(): Attribute
     {
         return Attribute::make(
-            get: fn($avatar) => $avatar ? asset(
-                'storage/authors/avatars/' . $this->getRawOriginal('uuid') . '/' . $avatar
-            ) : null,
+            get: fn($avatar) => $avatar
+                ? asset('storage/authors/avatars/' . $this->getRawOriginal('uuid') . '/' . $avatar)
+                : null,
             set: fn($avatar) => $avatar ? basename($avatar) : null,
         );
     }

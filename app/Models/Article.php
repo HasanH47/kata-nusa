@@ -72,12 +72,9 @@ class Article extends Model
     protected function thumbnail(): Attribute
     {
         return Attribute::make(
-            get: fn($thumbnail) => $thumbnail ? asset(
-                'storage/articles/thumbnails/' .
-                    $this->getRawOriginal('slug') .
-                    '/' .
-                    $thumbnail,
-            ) : null,
+            get: fn($thumbnail) => $thumbnail
+                ? asset('storage/articles/thumbnails/' . $this->getRawOriginal('slug') . '/' . $thumbnail)
+                : null,
             set: fn($thumbnail) => $thumbnail ? basename($thumbnail) : null,
         );
     }

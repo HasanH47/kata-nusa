@@ -28,12 +28,15 @@ class AuthController extends Controller
         if ($login['status']) {
             session()->flash('alert', [
                 'type' => 'success',
-                'message' => $login['message']
+                'message' => $login['message'],
             ]);
+
             return redirect($login['intended_url']);
         }
 
-        return back()->withErrors(['login' => $login['message']])->withInput($request->only('email', 'remember'));
+        return back()
+            ->withErrors(['login' => $login['message']])
+            ->withInput($request->only('email', 'remember'));
     }
 
     public function showRegistrationForm()
@@ -48,13 +51,15 @@ class AuthController extends Controller
         if ($register['status']) {
             session()->flash('alert', [
                 'type' => 'success',
-                'message' => $register['message']
+                'message' => $register['message'],
             ]);
 
             return redirect($register['intended_url']);
         }
 
-        return back()->withErrors(['register' => $register['message']])->withInput($request->only('name', 'email', 'username'));
+        return back()
+            ->withErrors(['register' => $register['message']])
+            ->withInput($request->only('name', 'email', 'username'));
     }
 
     public function logout()

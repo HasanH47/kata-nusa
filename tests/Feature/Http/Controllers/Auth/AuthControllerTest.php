@@ -10,16 +10,12 @@ class AuthControllerTest extends TestCase
 {
     public function test_show_registration_form()
     {
-        $this->get(route('register'))
-            ->assertStatus(200)
-            ->assertViewIs('auth.register');
+        $this->get(route('register'))->assertStatus(200)->assertViewIs('auth.register');
     }
 
     public function test_show_login_form()
     {
-        $this->get(route('login'))
-            ->assertStatus(200)
-            ->assertViewIs('auth.login');
+        $this->get(route('login'))->assertStatus(200)->assertViewIs('auth.login');
     }
 
     public function test_register()
@@ -33,9 +29,7 @@ class AuthControllerTest extends TestCase
 
         $data['password_confirmation'] = $data['password'];
 
-        $this->post(route('register'), $data)
-            ->assertStatus(302)
-            ->assertRedirect(route('login'));
+        $this->post(route('register'), $data)->assertStatus(302)->assertRedirect(route('login'));
     }
 
     public function test_login()
@@ -51,17 +45,13 @@ class AuthControllerTest extends TestCase
             'password' => $password,
         ];
 
-        $this->post(route('login'), $data)
-            ->assertStatus(302)
-            ->assertRedirect(route('home'));
+        $this->post(route('login'), $data)->assertStatus(302)->assertRedirect(route('home'));
     }
 
     public function test_logout()
     {
         $user = User::factory()->create();
 
-        $this->actingAs($user)->post(route('logout'))
-            ->assertStatus(302)
-            ->assertRedirect(route('home'));
+        $this->actingAs($user)->post(route('logout'))->assertStatus(302)->assertRedirect(route('home'));
     }
 }
