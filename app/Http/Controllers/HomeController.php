@@ -17,10 +17,13 @@ class HomeController extends Controller
 
         $articles = Article::with(['author', 'articleComments'])
             ->where('is_published', true)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('published_at', 'desc')
             ->paginate(10, ['*'], 'page', $page);
 
-        $trendingArticles = Article::where('is_published', true)->orderBy('views', 'desc')->limit(5)->get();
+        $year = Carbon::now()->year;
+        $month = Carbon::now()->month;
+
+        $trendingArticles = Article::where('is_published', true)->whereYear('published_at', $year)->whereMonth('published_at', $month)->orderBy('views', 'desc')->limit(5)->get();
 
         $trendingCategories = Category::with(['articleCategories', 'articleCategories.article'])
             ->whereHas('articleCategories.article', function ($query) {
@@ -68,17 +71,17 @@ class HomeController extends Controller
 
         switch ($period) {
             case 'monthly':
-                $query->where('updated_at', '>=', Carbon::now()->subMonth());
+                $query->where('published_at', '>=', Carbon::now()->subMonth());
                 break;
             case 'weekly':
-                $query->where('updated_at', '>=', Carbon::now()->subWeek());
+                $query->where('published_at', '>=', Carbon::now()->subWeek());
                 break;
             case 'yearly':
-                $query->where('updated_at', '>=', Carbon::now()->subYear());
+                $query->where('published_at', '>=', Carbon::now()->subYear());
                 break;
             case 'daily':
             default:
-                $query->where('updated_at', '>=', Carbon::now()->subDay());
+                $query->where('published_at', '>=', Carbon::now()->subDay());
                 break;
         }
 

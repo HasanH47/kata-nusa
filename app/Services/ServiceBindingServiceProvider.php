@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Services\Auth\AuthService;
+use App\Services\Dashboard\Articles\ArticleService;
+use App\Services\Dashboard\Profiles\ProfileService;
 use Illuminate\Support\ServiceProvider;
 
 class ServiceBindingServiceProvider extends ServiceProvider
@@ -15,6 +17,8 @@ class ServiceBindingServiceProvider extends ServiceProvider
     protected $serviceBindings = [
         // Format: [Abstract/Interface => Concrete Class]
         AuthService::class => AuthService::class,
+        ArticleService::class => ArticleService::class,
+        ProfileService::class => ProfileService::class
     ];
 
     /**
@@ -26,12 +30,6 @@ class ServiceBindingServiceProvider extends ServiceProvider
         foreach ($this->serviceBindings as $abstract => $concrete) {
             $this->app->singleton($abstract, $concrete);
         }
-
-        // Tambahkan binding untuk service classes lainnya di sini
-        // Contoh:
-        // $this->app->bind(PostService::class, function ($app) {
-        //     return new PostService();
-        // });
     }
 
     /**

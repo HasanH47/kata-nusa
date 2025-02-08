@@ -44,4 +44,14 @@ class User extends Authenticatable
     #[Column(name: 'remember_token')]
     #[Hidden]
     public ?string $remember_token;
+
+    /**
+     * Get the author that owns the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function author()
+    {
+        return $this->hasOne(Author::class);
+    }
 }

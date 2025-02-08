@@ -13,7 +13,13 @@
 
             <div class="flex items-center space-x-6 mb-6">
                 <div class="shrink-0">
-                    <img id="preview" src="https://via.placeholder.com/120" alt="Profile" class="h-24 w-24 object-cover rounded-full">
+                    @if (auth()->user()->author->avatar)
+                    <img id="preview" src="{{ auth()->user()->author->avatar }}0" alt="Profile" class="h-24 w-24 object-cover rounded-full">
+                    @else
+                    <div id="preview" class="h-24 w-24 bg-gray-200 flex items-center justify-center text-2xl font-bold text-gray-700 rounded-full">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    </div>
+                    @endif
                 </div>
                 <div>
                     <label for="avatar" class="block text-sm font-medium text-gray-700 mb-2">Foto Profil</label>
@@ -37,7 +43,7 @@
                        name="name"
                        required
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
-                       value="John Doe">
+                       value="{{ auth()->user()->name }}">
             </div>
 
             <div>
@@ -47,7 +53,7 @@
                        name="username"
                        required
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
-                       value="johndoe">
+                       value="{{ auth()->user()->author->username }}">
             </div>
 
             <div>
@@ -56,7 +62,7 @@
                           name="bio"
                           rows="3"
                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
-                          placeholder="Ceritakan sedikit tentang diri Anda..."></textarea>
+                          placeholder="Ceritakan sedikit tentang diri Anda...">{{ auth()->user()->author->bio }}</textarea>
             </div>
 
             <div>
@@ -65,7 +71,8 @@
                        id="location"
                        name="location"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
-                       placeholder="Kota, Provinsi">
+                       placeholder="Kota, Provinsi"
+                       value="{{ auth()->user()->author->address }}">
             </div>
 
             <div>
@@ -74,7 +81,8 @@
                        id="website"
                        name="website"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
-                       placeholder="https://example.com">
+                       placeholder="https://example.com"
+                       value="{{ auth()->user()->author->website }}">
             </div>
 
             <div class="pt-4 border-t border-gray-200">
@@ -85,7 +93,7 @@
                            id="email"
                            name="email"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
-                           value="john@example.com">
+                           value="{{ auth()->user()->email }}">
                 </div>
             </div>
 
@@ -116,7 +124,10 @@
                 </div>
             </div>
 
-            <div class="flex justify-end">
+            <div class="flex justify-end space-x-4">
+                <a href="{{ route('dashboard') }}" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                    Batal
+                </a>
                 <button type="submit"
                         class="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800">
                     Simpan Perubahan
@@ -129,12 +140,28 @@
 
 @push('scripts')
 <script>
-    document.querySelector('#avatar').onchange = function() {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            document.querySelector('#preview').src = e.target.result;
-        };
-        reader.readAsDataURL(this.files[0]);
-    };
+    document.addEventListener('DOMContentLoaded', () => {
+        const avatar = document.getElementById('avatar');
+        const preview = document.getElementById('preview');
+
+        if (avatar) {
+            avatar.addEventListener('change', function() {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    if (preview.tagName === 'DIV') {
+                        const img = document.createElement('img');
+                        img.id = 'preview';
+                        img.src = e.target.result;
+                        img.alt = 'Profile';
+                        img.className = 'h-24 w-24 object-cover rounded-full';
+                        preview.replaceWith(img);
+                    } else {
+                        preview.src = e.target.result;
+                    }
+                };
+                reader.readAsDataURL(this.files[0]);
+            });
+        }
+    });
 </script>
 @endpush

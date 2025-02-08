@@ -22,7 +22,7 @@
                     <img src="{{ $article->author->avatar }}" alt="{{ $article->author->username }}" class="w-10 h-10 rounded-full">
                     <div>
                         <h3 class="font-medium text-gray-900">{{ $article->author->user->name }}</h3>
-                        <p class="text-sm text-gray-500">{{ $article->updated_at }}</p>
+                        <p class="text-sm text-gray-500">{{ $article->published_at }}</p>
                     </div>
                 </div>
 

@@ -13,6 +13,7 @@ WORKDIR /var/www/html
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Jakarta
 ENV SUPERVISOR_PHP_COMMAND="/usr/bin/php -d variables_order=EGPCS /var/www/html/artisan octane:start --server=frankenphp --host=0.0.0.0 --admin-port=2019 --port='${APP_PORT:-80}'"
+ENV SUPERVISOR_QUEUE_WORK_COMMAND="php /var/www/html/artisan queue:work --sleep=3 --tries=3 --timeout=90"
 ENV SUPERVISOR_PHP_USER="sail"
 
 RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone

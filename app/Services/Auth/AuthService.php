@@ -45,6 +45,7 @@ class AuthService
         Author::create([
             'user_id' => $user->id,
             'username' => $data['username'],
+            'bio' => 'Ceritakan sedikit tentang diri Anda...',
         ]);
 
         return [

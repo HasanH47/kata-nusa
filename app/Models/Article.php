@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Symfony\Component\Uid\Ulid;
 use WendellAdriel\Lift\Attributes\Cast;
@@ -14,7 +16,7 @@ use WendellAdriel\Lift\Lift;
 
 class Article extends Model
 {
-    use HasFactory, Lift;
+    use HasFactory, SoftDeletes, Lift;
 
     #[Cast('int')]
     #[Column(name: 'author_id')]
@@ -46,12 +48,12 @@ class Article extends Model
     public ?string $body;
 
     #[Cast('int')]
-    #[Column(name: 'views')]
+    #[Column(name: 'views', default: 0)]
     #[Fillable]
     public ?int $views;
 
     #[Cast('int')]
-    #[Column(name: 'likes')]
+    #[Column(name: 'likes', default: 0)]
     #[Fillable]
     public ?int $likes;
 
@@ -59,6 +61,16 @@ class Article extends Model
     #[Column(name: 'is_published')]
     #[Fillable]
     public ?bool $is_published;
+
+    #[Cast('datetime')]
+    #[Column(name: 'published_at')]
+    #[Fillable]
+    public ?Carbon $published_at;
+
+    #[Cast('string')]
+    #[Column(name: 'uuid', default: 'generateUuid')]
+    #[Fillable]
+    public ?string $uuid;
 
     public function generateSlug(): string
     {
@@ -69,12 +81,22 @@ class Article extends Model
         return $title . '-' . $ulid;
     }
 
+    public function generateUuid(): string
+    {
+        return Str::uuid();
+    }
+
     protected function thumbnail(): Attribute
     {
         return Attribute::make(
-            get: fn($thumbnail) => $thumbnail
-                ? asset('storage/articles/thumbnails/' . $this->getRawOriginal('slug') . '/' . $thumbnail)
-                : null,
+            get: function ($thumbnail) {
+                $author = Author::find($this->getRawOriginal('author_id'));
+                $authorUuid = $author ? $author->uuid : null;
+
+                return $thumbnail
+                ? asset('storage/features/articles/thumbnails/' . $authorUuid . '/' . $thumbnail)
+                : null;
+            },
             set: fn($thumbnail) => $thumbnail ? basename($thumbnail) : null,
         );
     }

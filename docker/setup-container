@@ -24,6 +24,9 @@ php artisan route:cache
 php artisan view:cache
 php artisan optimize
 
+# Storage symlink
+php artisan storage:link
+
 # Run migrations
 php artisan migrate --force --no-interaction
 

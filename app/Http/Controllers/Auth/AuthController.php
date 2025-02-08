@@ -26,12 +26,10 @@ class AuthController extends Controller
         $login = $this->authService->login($request->validated());
 
         if ($login['status']) {
-            session()->flash('alert', [
+            return redirect($login['intended_url'])->with('alert', [
                 'type' => 'success',
                 'message' => $login['message'],
             ]);
-
-            return redirect($login['intended_url']);
         }
 
         return back()
@@ -49,12 +47,10 @@ class AuthController extends Controller
         $register = $this->authService->register($request->validated());
 
         if ($register['status']) {
-            session()->flash('alert', [
+            return redirect($register['intended_url'])->with('alert', [
                 'type' => 'success',
                 'message' => $register['message'],
             ]);
-
-            return redirect($register['intended_url']);
         }
 
         return back()

@@ -85,8 +85,8 @@
                             </svg>
                         </button>
 
-                        <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg">
-                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profil</a>
+                        <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg">
+                            <a href="{{ route('dashboard')}}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Dasbor</a>
                             <form id="logout" method="POST" action="{{ route('logout') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                 @csrf
                                 <a href="#" @click.prevent="document.getElementById('logout').submit()" class="block text-gray-700 hover:bg-gray-100">Keluar</a>

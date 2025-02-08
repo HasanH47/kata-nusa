@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Str;
 use WendellAdriel\Lift\Attributes\Cast;
 use WendellAdriel\Lift\Attributes\Column;
 use WendellAdriel\Lift\Attributes\Fillable;
@@ -52,7 +52,7 @@ class Author extends Model
 
     public function generateUuid(): string
     {
-        return Uuid::uuid4()->toString();
+        return Str::uuid();
     }
 
     protected function avatar(): Attribute

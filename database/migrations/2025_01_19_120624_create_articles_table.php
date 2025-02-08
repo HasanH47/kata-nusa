@@ -15,13 +15,14 @@ return new class extends Migration {
             $table->foreignId('author_id')->nullable()->constrained()->nullOnDelete();
             $table->string('title');
             $table->string('slug')->unique();
-            $table->string('summary')->nullable();
+            $table->string('summary');
             $table->string('thumbnail')->nullable();
             $table->text('body');
-            $table->integer('views')->default(0);
-            $table->integer('likes')->default(0);
+            $table->integer('views');
+            $table->integer('likes');
             $table->boolean('is_published')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

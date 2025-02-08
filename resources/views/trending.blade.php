@@ -34,6 +34,7 @@
 
     <!-- Trending Articles -->
     <div class="space-y-6">
+        @if ($articles->count() > 0)
         @foreach($articles as $key => $article)
         <article class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
             <div class="flex items-start space-x-6">
@@ -43,7 +44,7 @@
                         <img src="{{ $article->author->avatar }}" alt="{{ $article->author->username }}" class="w-10 h-10 rounded-full">
                         <div>
                             <h3 class="font-medium text-gray-900">{{ $article->author->user->name }}</h3>
-                            <p class="text-sm text-gray-500">{{ $article->updated_at }}</p>
+                            <p class="text-sm text-gray-500">{{ $article->published_at }}</p>
                         </div>
                     </div>
 
@@ -90,6 +91,9 @@
             </div>
         </article>
         @endforeach
+        @else
+        <p>Tidak ada artikel</p>
+        @endif
     </div>
 </div>
 @endsection
